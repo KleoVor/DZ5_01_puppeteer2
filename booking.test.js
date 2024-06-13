@@ -11,6 +11,7 @@ const {
   chooseRandomPastSession,
 } = require("./lib/commands.js");
 
+
 const pageStart = "https://qamid.tmweb.ru/client/index.php";
 const pageBooking = "https://qamid.tmweb.ru/client/hall.php";
 
@@ -18,14 +19,14 @@ describe("Booking", () => {
   let browser;
   let page;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     browser = await puppeteer.launch({ headless: false });
     page = await browser.newPage();
     await page.goto(pageStart);
     await checkSiteAvailability(page);
   }, 30000);
 
-  afterAll(async () => {
+  afterEach(async () => {
     await browser.close();
   });
 
@@ -49,8 +50,6 @@ describe("Booking", () => {
       const selectedTime = await chooseRandomTimeForMovie(page, selectedMovie);
       await new Promise((resolve) => setTimeout(resolve, 2000));
       console.log("выбран сеанс в выбранном фильме:", selectedTime);
-
-      await checkSiteAvailability(pageBooking);
 
       await clickOnMultipleElements(page, seatSelectors);
 
@@ -76,8 +75,6 @@ describe("Booking", () => {
     const selectedTime = await chooseRandomTimeForMovie(page, selectedMovie);
     await new Promise((resolve) => setTimeout(resolve, 2000));
     console.log("выбран сеанс в выбранном фильме:", selectedTime);
-
-    await checkSiteAvailability(pageBooking);
 
     await clickOnMultipleElements(page, seatSelectors);
 
@@ -115,6 +112,6 @@ describe("Booking", () => {
         console.log("Класс элемента после клика:");
         console.log(classAfterClick);
       }
-    });
+    },3000);
   });
 });
