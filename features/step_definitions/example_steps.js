@@ -23,6 +23,21 @@ const assert = chai.assert;
 */
 
 
+// Используйте динамический импорт для модуля chai
+let chai;
+let expect;
+let assert;
+
+// Динамический импорт для загрузки chai и разрешения ошибки ERR_REQUIRE_ESM
+import('chai').then(chaiModule => {
+    chai = chaiModule.default || chaiModule; // Обычно модуль chai доступен как экспорт по умолчанию
+    expect = chai.expect;
+    assert = chai.assert;
+}).catch(error => {
+    console.error('Ошибка загрузки модуля "chai" динамически:', error);
+});
+
+
 
 process.env.DEFAULT_TIMEOUT_INTERVAL = 70000; // 70 секунд
 
@@ -150,6 +165,7 @@ Then('Я проверяю, что класс элемента не измени�
         expect(classBeforeClick).to.equal(classAfterClick);
         assert.strictEqual(classBeforeClick, classAfterClick, "Класс элемента изменился после клика.");
     }
+
 /*
     // Проверяем, что класс элемента не изменился после клика
     if (classBeforeClick === classAfterClick) {
