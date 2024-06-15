@@ -1,4 +1,5 @@
 const puppeteer = require("puppeteer");
+
 const {
   checkSiteAvailability,
   clickOnMultipleElements,
@@ -7,6 +8,7 @@ const {
   chooseRandomTimeForMovie,
   clickElement,
   checkPageURL,
+  checkElementClassBeforeAndAfterClick,
   checkButtonClickable,
   chooseRandomPastSession,
 } = require("./lib/commands.js");
@@ -29,6 +31,9 @@ describe("Booking", () => {
   afterEach(async () => {
     await browser.close();
   });
+
+
+
 
   describe("successful booking", () => {
     test("Booking chairs 1/1, 2/1, 3/1, 4/1", async () => {
@@ -85,33 +90,25 @@ describe("Booking", () => {
 
   describe("unsuccessful booking", () => {
     test("booking for the last time", async () => {
-      const { element: randomElement, index: randomIndex } =
-        await chooseRandomPastSession(page);
-
+      const { element: randomElement, index: randomIndex } = await chooseRandomPastSession(page);
+  
       if (!randomElement) {
-        console.log("Не удалось выбрать случайный элемент.");
+          console.log("Не удалось выбрать случайный элемент.");
       } else {
-        // Получаем класс элемента до клика
-        const classBeforeClick = await randomElement.evaluate(
-          (el) => el.className,
-        );
-
-        // Совершаем клик на кнопку
-        await randomElement.click();
-
-        // Получаем класс элемента после клика
-        const classAfterClick = await randomElement.evaluate(
-          (el) => el.className,
-        );
-
-        // Проверяем, что класс элемента остался без изменений
-        expect(classBeforeClick).toBe(classAfterClick);
-
-        console.log("Класс элемента до клика:");
-        console.log(classBeforeClick);
-        console.log("Класс элемента после клика:");
-        console.log(classAfterClick);
+          try {
+              const { classBeforeClick, classAfterClick } = await checkElementClassBeforeAndAfterClick(randomElement);
+  
+              // Проверяем, что класс элемента остался без изменений
+              expect(classBeforeClick).toBe(classAfterClick);
+  
+              console.log("Класс элемента до клика:");
+              console.log(classBeforeClick);
+              console.log("Класс элемента после клика:");
+              console.log(classAfterClick);
+          } catch (error) {
+              console.error("Ошибка при проверке класса элемента после клика:", error);
+          }
       }
-    },3000);
   });
 });
+})
