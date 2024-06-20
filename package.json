@@ -16,11 +16,8 @@
     "prettier": "^3.3.0",
     "puppeteer": "^22.10.0",
     "@cucumber/cucumber-async": "^2.0.0"
-
-
   },
   "dependencies": {
-
     "axios": "^1.7.2",
     "chai": "^5.1.1",
     "extract-zip": "^2.0.1",
@@ -29,7 +26,6 @@
     "path-type": "^4.0.0",
     "picomatch": "^2.3.1",
     "pretty-format": "^29.7.0"
-
   },
   "description": ""
 }
